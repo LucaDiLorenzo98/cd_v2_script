@@ -94,7 +94,8 @@ def disegna_pulsanti(config, selezionato=None):
     pygame.display.flip()
 
 def disegna_configuratore_avanzato(selezionato, config):
-    global tipo_button_rects, cancel_button_rect
+    # Globals used for click detection in the main loop
+    global tipo_button_rects, cancel_button_rect, input_rect, browse_button_rect, save_button_rect
     small_font = pygame.font.SysFont(None, 16)
 
     data = config.get(selezionato, {"type": "none", "value": ""})
@@ -104,7 +105,7 @@ def disegna_configuratore_avanzato(selezionato, config):
     tipo = temp_config_type if temp_config_type is not None else data.get("type", "none")
     valore = temp_config_value if temp_config_value is not None else data.get("value", "")
 
-    opzioni = ["LINK", "EXE", "NONE"]
+    opzioni = ["LINK", "START", "EXE", "NONE"]
     base_y = 460
     btn_width = 120
     btn_height = 40
@@ -134,13 +135,28 @@ def disegna_configuratore_avanzato(selezionato, config):
 
         base_y += label.get_height() + 5
 
-        global input_rect
         input_rect = pygame.Rect(50, base_y, 540, 30)
         pygame.draw.rect(SCREEN, (255, 255, 255), input_rect, border_radius=4)
 
         colore_testo = (0, 0, 0)
         testo_url = valore if valore else ""
         render_text = small_font.render(testo_url, True, colore_testo)
+        SCREEN.blit(render_text, (input_rect.x + 5, input_rect.y + 7))
+
+        base_y += 40
+
+    elif tipo == "start":
+        label = small_font.render("ENTER TARGET FOR START:", True, (200, 200, 200))
+        SCREEN.blit(label, (50, base_y))
+
+        base_y += label.get_height() + 5
+
+        input_rect = pygame.Rect(50, base_y, 540, 30)
+        pygame.draw.rect(SCREEN, (255, 255, 255), input_rect, border_radius=4)
+
+        colore_testo = (0, 0, 0)
+        testo_cmd = valore if valore else ""
+        render_text = small_font.render(testo_cmd, True, colore_testo)
         SCREEN.blit(render_text, (input_rect.x + 5, input_rect.y + 7))
 
         base_y += 40
