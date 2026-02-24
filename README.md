@@ -47,6 +47,19 @@ python main.py --gui
 ```
 
 If everything is set up correctly, a graphical window will open.
+In this mode, serial listening also runs in background, so you can test hardware buttons immediately.
+
+If you only want to run the hardware listener (without GUI), use:
+
+```bash
+python main.py
+```
+
+If you want GUI only (no serial listener), use:
+
+```bash
+python main.py --gui --gui-only
+```
 
 ---
 
@@ -68,8 +81,14 @@ Settings are stored in a local file called `config.json`.
 
 ## ❓ Troubleshooting
 
-**🟡 Nothing happens when I click a button?**  
-Make sure you launched the app using: `python main.py --gui`
+**🟡 Nothing happens when I press a physical deck button / volume knob?**  
+- Make sure Arduino Serial Monitor is closed (only one app can use COM at a time)  
+- In Python output, check you see: `Connesso a COMxx`  
+- Verify your COM port in `logic.py` (or set env var `CONSOLEDECK_PORT`, e.g. `COM13`)  
+- Use `python main.py` or `python main.py --gui` (without `--gui-only`)
+
+**🟡 Nothing happens when I click inside the GUI?**  
+Make sure you launched with: `python main.py --gui`
 
 **🔗 Can I use YouTube or other links?**  
 Yes, any valid `https://` link will work.

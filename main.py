@@ -3,15 +3,26 @@ from logic import load_config, save_config, ascolta_seriale, seleziona_pulsante,
 from gui import init_pygame, disegna_pulsanti, trova_pulsante_click
 import pygame
 import pyperclip
+import threading
 
 import gui
 
-def main(gui_mode):
+def main(gui_mode, gui_only=False):
     config = load_config()
 
     if gui_mode:
         init_pygame()
         pygame.key.set_repeat(300, 30)
+
+        if not gui_only:
+            serial_thread = threading.Thread(
+                target=ascolta_seriale,
+                args=(config,),
+                daemon=True,
+                name="consoledeck-serial-listener"
+            )
+            serial_thread.start()
+            print("[DEBUG] Listener seriale avviato in background (GUI mode)")
     
         running = True
         while running:
@@ -174,5 +185,8 @@ def main(gui_mode):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--gui', action='store_true', help="Avvia la GUI di configurazione")
+    parser.add_argument('--gui-only', action='store_true', help="Con --gui, non avvia il listener seriale in background")
     args = parser.parse_args()
-    main(args.gui)
+    if args.gui_only and not args.gui:
+        parser.error("--gui-only richiede anche --gui")
+    main(args.gui, args.gui_only)
