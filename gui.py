@@ -18,6 +18,9 @@ SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 650
 
 cancel_button_rect = None
+browse_button_rect = None
+save_button_rect = None
+tipo_button_rects = {}
 
 temp_config_type = None
 temp_config_value = None
@@ -113,6 +116,8 @@ def disegna_configuratore_avanzato(selezionato, config):
     total_width = len(opzioni) * btn_width + (len(opzioni) - 1) * spazio
     start_x = (SCREEN_WIDTH - total_width) // 2
     tipo_button_rects = {}
+    input_rect = None
+    browse_button_rect = None
 
     for i, nome in enumerate(opzioni):
         x = start_x + i * (btn_width + spazio)
@@ -170,7 +175,6 @@ def disegna_configuratore_avanzato(selezionato, config):
         pygame.draw.rect(SCREEN, (200, 120, 40), browse_rect, border_radius=5)
         btn_text = small_font.render("BROWSE", True, (255, 255, 255))
         SCREEN.blit(btn_text, btn_text.get_rect(center=browse_rect.center))
-        global browse_button_rect
         browse_button_rect = browse_rect
         
         base_y += 40
