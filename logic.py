@@ -6,7 +6,7 @@ import serial
 import time
 import ctypes
 
-PORTA_ARDUINO = "COM11"
+PORTA_ARDUINO = "COM3"
 BAUDRATE = 9600
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +46,18 @@ def esegui_azione(azione):
             subprocess.Popen(azione["value"])
         except Exception as e:
             print("Errore aprendo eseguibile:", e)
+    elif azione["type"] == "start" and azione["value"]:
+        # Usa il comando start di cmd per lanciare app, UWP o URL
+        try:
+            target = azione["value"].strip()
+            if target.lower().startswith("start "):
+                target = target[6:].strip()  # tollera valori tipo "start applemusic"
+            if not target:
+                print("[WARN] start: valore vuoto")
+                return
+            subprocess.Popen(["cmd", "/c", "start", "", target], shell=False)
+        except Exception as e:
+            print("Errore eseguendo start:", e)
     else:
         print("Nessuna azione definita")
 
