@@ -3,11 +3,29 @@ import json
 import subprocess
 import webbrowser
 import serial
+import serial.tools.list_ports
 import time
 import ctypes
 
-PORTA_ARDUINO = "COM11"
 BAUDRATE = 9600
+
+ARDUINO_KEYWORDS = ["arduino", "ch340", "ch341", "ftdi", "usb serial", "usb-serial"]
+
+def trova_porta_arduino():
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        description = (port.description or "").lower()
+        manufacturer = (port.manufacturer or "").lower()
+        if any(kw in description or kw in manufacturer for kw in ARDUINO_KEYWORDS):
+            print(f"[DEBUG] Arduino found on {port.device}: {port.description}")
+            return port.device
+    if ports:
+        print(f"[DEBUG] No Arduino signature found, defaulting to first port: {ports[0].device}")
+        return ports[0].device
+    print("[ERROR] No serial ports found.")
+    return None
+
+PORTA_ARDUINO = trova_porta_arduino()
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(SCRIPT_DIR, "config.json")
