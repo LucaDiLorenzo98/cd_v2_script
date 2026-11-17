@@ -10,6 +10,7 @@ int lastStateCLK;
 
 void setup() {
   Serial.begin(9600);
+  Serial.println("CONSOLEDECK_READY");  // messaggio di avvio: conferma che lo sketch e' in esecuzione
 
   // Encoder
   pinMode(CLK, INPUT);
