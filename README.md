@@ -29,24 +29,40 @@ Ideal for creating your own customizable macro deck or personal launcher.
 3. In the terminal window, paste the following command:
 
 ```bash
-pip install pygame pyperclip pyserial
+pip install pygame-ce pyperclip pyserial
 ```
+
+(or, from inside the project folder: `pip install -r requirements.txt`)
+
+> ℹ️ This uses **pygame-ce**, a maintained drop-in replacement for `pygame`. The original `pygame` package has no installer for the newest Python versions (e.g. 3.15), so `pip install pygame` tries to compile it and fails with errors like `No module named 'distutils.msvccompiler'`. If you already installed `pygame`, remove it first with `pip uninstall pygame`; the two cannot be installed together.
 
 If you get an error like `'pip' is not recognized`, try restarting your PC.
 
 ---
 
-## ▶️ Step 3 – Run ConsoleDeck
+## ▶️ Step 3 – Program your buttons
 
 1. Download all project files into a folder (e.g., Desktop)
-2. Open that folder in the terminal (`cmd`)
-3. Start the app with this command:
+2. Double-click `consoledeck.bat`, or open that folder in the terminal (`cmd`) and run:
 
 ```bash
 python main.py --gui
 ```
 
-If everything is set up correctly, a graphical window will open.
+If everything is set up correctly, a graphical window will open. Program your buttons and click **Save**, then close the window.
+
+---
+
+## 🎛️ Step 4 – Use the deck
+
+1. Plug in the ConsoleDeck (Arduino) over USB
+2. Double-click `avvio_consoledeck.bat`, or run:
+
+```bash
+python main.py
+```
+
+The terminal should print `Connesso a COM…` ("Connected to COM…"). Leave this window open: it listens to the deck and performs each button's action. If you change your buttons in the GUI later, close this window and start it again so it picks up the new settings.
 
 ---
 
@@ -79,6 +95,9 @@ Settings are stored in a local file called `config.json`.
 
 **🟡 Nothing happens when I click a button?**  
 Make sure you launched the app using: `python main.py --gui`
+
+**🎛️ Nothing happens when I press a button on the deck?**  
+The deck only works while `python main.py` (without `--gui`) is running; see Step 4. If it prints `[ERRORE] Porta seriale`, make sure the deck is plugged in and that nothing else is using its port (for example, close the Arduino IDE's Serial Monitor).
 
 **🔗 Can I use YouTube or other links?**  
 Yes, any valid `https://` link will work.
